@@ -19,7 +19,7 @@
       color: #e5e7ff;
     }
 
-    /* NAVBAR */
+
     .navbar {
       width: 100%;
       position: sticky;
@@ -41,7 +41,7 @@
       position: relative;
     }
 
-    /* TOP BORDER GLOW */
+    
     .navbar::before {
       content: "";
       position: absolute;
@@ -59,7 +59,7 @@
       100% { background-position: 200% 50%; }
     }
 
-    /* LEFT LOGO AREA */
+    
     .navbar-left {
       display: flex;
       align-items: center;
@@ -67,7 +67,7 @@
       flex-shrink: 0;
     }
 
-    /* FLOATING LOGO */
+    
     .navbar-logo svg {
       animation: floatLogo 3.2s ease-in-out infinite;
       transition: transform 0.3s ease, filter 0.3s ease;
@@ -85,7 +85,7 @@
       filter: drop-shadow(0 0 10px rgba(128, 255, 219, 0.95));
     }
 
-    /* TITLE + TAGLINE */
+    
     .navbar-title {
       font-size: 1.25rem;
       font-weight: 800;
@@ -103,7 +103,7 @@
       margin-top: 2px;
     }
 
-    /* NAV LINKS (CENTER) */
+    
     .nav-center {
       display: flex;
       gap: 28px;
@@ -125,7 +125,6 @@
       position: relative;
     }
 
-    /* Underline animation */
     .nav-center a::after {
       content: "";
       position: absolute;
@@ -143,26 +142,26 @@
       width: 80%;
     }
 
-    /* Neon hover (except logout) */
+   
     .nav-center a:not(.logout):hover {
       color: #80ffdb;
       text-shadow: 0 0 8px rgba(128, 255, 219, 0.8);
       transform: translateY(-1px);
     }
 
-    /* Logout stays red (no neon) */
+    
     .logout {
       color: #ffb4b4 !important;
     }
 
-    /* PAGE CONTENT */
+    
     .content-wrapper {
       max-width: 1100px;
       margin: 30px auto 40px;
       padding: 0 20px;
     }
 
-    /* MOBILE */
+   
     @media (max-width: 850px) {
       .navbar {
         flex-direction: column;

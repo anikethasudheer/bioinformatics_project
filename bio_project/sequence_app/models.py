@@ -10,7 +10,7 @@ class DNASequence(models.Model):
     submission_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        # Displays a readable name in the Django Admin interface
+       
         return f"ID {self.id} - Length {self.length} bp"
 
 from django.db import models

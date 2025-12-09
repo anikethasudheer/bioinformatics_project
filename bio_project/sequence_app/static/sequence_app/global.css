@@ -1,4 +1,4 @@
-/* Card Containers */
+
 .form-card,
 .orf-card,
 .motif-card,
@@ -8,12 +8,12 @@
     background: rgba(255, 255, 255, 0.15);
     padding: 30px;
     border-radius: 22px;
-    border: 1px solid rgba(255, 255, 255, 0.35); /* FIXED */
+    border: 1px solid rgba(255, 255, 255, 0.35); 
     backdrop-filter: blur(8px);
     box-sizing: border-box;
 }
 
-/* Inputs */
+
 textarea,
 input[type="text"],
 input[type="file"],
@@ -32,12 +32,12 @@ select {
     box-sizing: border-box;
 }
 
-/* File input (ensures width consistency) */
+
 input[type="file"] {
     width: 100% !important;
 }
 
-/* Buttons */
+
 button,
 input[type="submit"] {
     width: 100%;
@@ -52,7 +52,7 @@ input[type="submit"] {
     transition: 0.25s ease;
 }
 
-/* Hover Effects */
+
 button:hover,
 input[type="submit"]:hover {
     background: rgba(70, 80, 240, 1);

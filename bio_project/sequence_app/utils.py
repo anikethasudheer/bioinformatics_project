@@ -1,10 +1,10 @@
-# utils.py
+
 
 CODON_TABLE = {
     "UUU": "F", "UUC": "F",
     "UUA": "L", "UUG": "L", "CUU": "L", "CUC": "L", "CUA": "L", "CUG": "L",
     "AUU": "I", "AUC": "I", "AUA": "I",
-    "AUG": "M",  # start
+    "AUG": "M",  
     "GUU": "V", "GUC": "V", "GUA": "V", "GUG": "V",
     "UCU": "S", "UCC": "S", "UCA": "S", "UCG": "S", "AGU": "S", "AGC": "S",
     "CCU": "P", "CCC": "P", "CCA": "P", "CCG": "P",
@@ -39,10 +39,10 @@ def translate_rna_to_protein(rna: str) -> str:
     """
     rna = rna.upper()
 
-    # find first AUG
+    
     start = rna.find("AUG")
     if start == -1:
-        return ""  # no start codon
+        return ""  
 
     protein = []
     for i in range(start, len(rna), 3):
