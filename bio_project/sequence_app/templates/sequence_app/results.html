@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .results-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glassmorphic Card */
+    .results-card {
+        padding: 36px;
+        border-radius: 24px;
+        background: rgba(255,255,255,0.18);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255,255,255,0.33);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+        color: #fff;
+    }
+
+    .header-row {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .header-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
+    }
+
+    .submission {
+        font-size: 1rem;
+        color: #e3e3ff;
+        text-align: right;
+    }
+
+    /* Section Titles */
+    h2, h3 {
+        color: #ffffff;
+        margin-top: 26px;
+        margin-bottom: 12px;
+        font-weight: 700;
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+        list-style: none;
+        padding: 0;
+    }
+
+    .summary-item {
+        background: rgba(255,255,255,0.20);
+        padding: 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.38);
+        backdrop-filter: blur(8px);
+    }
+
+    .summary-item strong {
+        font-size: 0.85rem;
+        color: #dcdcff;
+        letter-spacing: 0.03em;
+    }
+
+    .summary-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-top: 6px;
+    }
+
+    /* Sequence boxes */
+    .mono-box {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.35);
+        backdrop-filter: blur(10px);
+        padding: 16px;
+        border-radius: 12px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.95rem;
+        color: #ffffff;
+        white-space: pre-wrap;
+        max-height: 260px;
+        overflow-y: auto;
+        margin-top: 6px;
+    }
+
+    /* Chart */
+    .chart-wrapper {
+        background: rgba(255,255,255,0.18);
+        padding: 16px;
+        border-radius: 18px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.35);
+        text-align: center;
+    }
+
+    .chart-wrapper img {
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    /* Buttons */
+    .actions {
+        margin-top: 28px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .btn-glass {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 22px;
+        border-radius: 14px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.37);
+        color: #ffffff;
+        background: rgba(91,101,255,0.85);
+        box-shadow: 0 8px 24px rgba(91,101,255,0.45);
+        transition: 0.25s ease;
+    }
+    .btn-glass:hover {
+        background: rgba(70,80,240,1);
+        transform: translateY(-3px);
+    }
+
+    .btn-secondary {
+        background: rgba(255,255,255,0.25);
+        box-shadow: 0 6px 22px rgba(255,255,255,0.30);
+    }
+    .btn-secondary:hover {
+        background: rgba(255,255,255,0.40);
+    }
+</style>
+
+
+<div class="results-wrapper">
+
+    <div class="results-card">
+
+       <!-- HEADER -->
+<div class="header-row">
+    <h1 class="header-title">Analysis Results</h1>
+
+    {% if submission_date %}
+        <div class="submission">
+            <strong>Submission Date:</strong><br>
+            {{ submission_date }}
+        </div>
+    {% endif %}
+</div>
+
+
+        <!-- SUMMARY -->
+        <h2>Summary</h2>
+        <ul class="summary-grid">
+            <li class="summary-item">
+                <strong>Sequence Length</strong>
+                <div class="summary-value">{{ length }} bp</div>
+            </li>
+
+            <li class="summary-item">
+                <strong>GC Content</strong>
+                <div class="summary-value">{{ gc_percentage }}</div>
+            </li>
+        </ul>
+
+        <!-- SEQUENCES -->
+        <h2>Input Sequence</h2>
+        <div class="mono-box">{{ sequence }}</div>
+
+        <h3>Reverse Complement</h3>
+        <div class="mono-box">{{ reverse_complement }}</div>
+
+        <h3>RNA (Transcription)</h3>
+        <div class="mono-box">{{ rna_sequence }}</div>
+
+        <h3>Protein (Translation)</h3>
+        <div class="mono-box">
+            {% if protein_sequence %}
+                {{ protein_sequence }}
+            {% else %}
+                No protein could be translated from this sequence.
+            {% endif %}
+        </div>
+
+        <!-- CHART -->
+        <h2>Base Count Chart</h2>
+        <div class="chart-wrapper">
+            {% if base_chart %}
+                <img src="{{ base_chart }}" alt="Base count chart">
+            {% else %}
+                <p>No chart available</p>
+            {% endif %}
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+            <a href="{% url 'analyze_sequence' %}" class="btn-glass">Analyze Another Sequence ↻</a>
+            <a href="{% url 'primer_designer' %}?sequence={{ sequence }}" class="btn-glass btn-secondary">
+                Design Primers 🧬
+            </a>
+
+            {% if user.is_authenticated %}
+    <form method="post" action="{% url 'save_sequence' %}">
+        {% csrf_token %}
+        <input type="hidden" name="sequence" value="{{ sequence }}">
+       <button type="submit" class="btn-glass btn-secondary">Save Sequence 💾</button>
+
+    </form>
+{% else %}
+   <a href="{% url 'login' %}?next={{ request.path }}" class="btn-glass btn-secondary">
+    Login to Save Your Sequence 🔐
+</a>
+
+{% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

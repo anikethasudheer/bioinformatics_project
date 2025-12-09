@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* Wrapper */
+    .saved-wrapper {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+        animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glass main card */
+    .glass-card {
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255,255,255,0.28);
+        border-radius: 24px;
+        padding: 36px;
+        color: white;
+        box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    }
+
+    /* Title */
+    .glass-card h1 {
+        font-size: 2rem;
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    /* Each saved sequence item */
+    .sequence-item {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.32);
+        backdrop-filter: blur(10px);
+        padding: 18px 20px;
+        border-radius: 16px;
+        margin-bottom: 14px;
+        color: #ffffff;
+        font-family: "JetBrains Mono", monospace;
+        transition: 0.25s ease;
+        overflow-wrap: anywhere;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    .sequence-item:hover {
+        transform: translateY(-3px);
+        background: rgba(255,255,255,0.24);
+        box-shadow: 0 10px 30px rgba(255,255,255,0.18);
+    }
+
+    .seq-date {
+        font-size: 0.85rem;
+        opacity: 0.85;
+        margin-top: 6px;
+    }
+
+    /* Empty state */
+    .no-saves {
+        margin-top: 20px;
+        font-size: 1.2rem;
+        color: #dcdcff;
+        opacity: 0.9;
+        text-align: center;
+    }
+
+    /* Back Button */
+    .back-btn {
+        margin-top: 25px;
+        display: inline-block;
+        padding: 12px 22px;
+        background: rgba(91,101,255,0.85);
+        border-radius: 14px;
+        color: #ffffff;
+        font-weight: 700;
+        text-decoration: none;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.35);
+        transition: 0.25s ease;
+    }
+
+    .back-btn:hover {
+        background: rgba(70,80,240,1);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(91,101,255,0.45);
+    }
+</style>
+
+<div class="saved-wrapper">
+
+    <div class="glass-card">
+
+        <h1>Saved Sequences 💾</h1>
+
+        {% if saved %}
+            {% for item in saved %}
+                <div class="sequence-item">
+                    <strong>Sequence:</strong> {{ item.sequence }}
+                    <div class="seq-date">Saved on: {{ item.created }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-saves">You have no saved sequences yet.</p>
+        {% endif %}
+
+        <a href="{% url 'analyze_sequence' %}" class="back-btn">Analyze New Sequence ↻</a>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .orf-card {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 32px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 22px;
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: white;
+  }
+
+  textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.18);
+      color: white;
+      font-family: monospace;
+  }
+
+  .btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 14px;
+      background: #626CFF;
+      border: none;
+      color: white;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+  }
+
+  .orf-box {
+      background: rgba(255,255,255,0.15);
+      padding: 16px;
+      margin-top: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.3);
+  }
+</style>
+
+<div class="orf-card">
+
+  <h2>ORF Finder</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    <label>DNA Sequence:</label>
+    <textarea rows="5" name="sequence">{{ sequence }}</textarea>
+    <button class="btn" type="submit">Find ORFs</button>
+  </form>
+
+  {% if error %}
+      <div class="orf-box" style="background:rgba(255,0,0,0.2);">{{ error }}</div>
+  {% endif %}
+
+  {% if orfs %}
+      <h3>Detected ORFs ({{ orfs|length }})</h3>
+      {% for o in orfs %}
+          <div class="orf-box">
+              <strong>ORF {{ forloop.counter }}</strong><br>
+              Strand: {{ o.strand }}<br>
+              Frame: {{ o.frame }}<br>
+              Start: {{ o.start }}<br>
+              End: {{ o.end }}<br>
+              Length: {{ o.length_aa }} aa<br>
+              <pre>{{ o.dna }}</pre>
+          </div>
+      {% endfor %}
+  {% endif %}
+
+  {% if longest_orf %}
+      <h3>Longest ORF ({{ longest_orf.length_aa }} aa)</h3>
+      <div class="orf-box">
+          <pre>{{ protein }}</pre>
+      </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

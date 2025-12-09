@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  /* Glass UI motif card */
+  .motif-card {
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 32px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+      backdrop-filter: blur(14px);
+      animation: fadeIn 0.4s ease;
+      color: #ffffff;
+  }
+
+  @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2, h3, label {
+      color: #ffffff !important;
+  }
+
+  textarea,
+  input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.20);
+      color: #ffffff;
+      margin-top: 8px;
+      margin-bottom: 14px;
+      backdrop-filter: blur(10px);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1rem;
+  }
+
+  textarea:focus,
+  input[type="text"]:focus {
+      border-color: #5b65ff;
+      box-shadow: 0 0 8px rgba(91,101,255,0.45);
+      outline: none;
+  }
+
+  .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(91,101,255,0.85);
+      color: white;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-size: 1rem;
+      backdrop-filter: blur(6px);
+      margin-top: 12px;
+  }
+
+  .btn:hover {
+      background: rgba(70,80,240,1);
+      transform: translateY(-3px);
+  }
+
+  .result-box {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #ffffff;
+      backdrop-filter: blur(10px);
+  }
+
+  .error-box {
+      margin-top: 18px;
+      padding: 14px;
+      background: rgba(255,0,0,0.18);
+      border-left: 5px solid #ff4d4f;
+      border-radius: 10px;
+      color: #ffd2d2;
+  }
+</style>
+
+<div class="motif-card">
+
+  <h2>Motif Finder</h2>
+
+  <form method="POST">
+      {% csrf_token %}
+
+      <label>DNA Sequence:</label>
+      <textarea rows="5" name="sequence">{{ sequence }}</textarea>
+
+      <label>Motif (e.g., ATG, TATA, ACGT):</label>
+      <input type="text" name="motif" value="{{ motif }}">
+
+      <button class="btn" type="submit">Search Motif</button>
+  </form>
+
+  {% if error %}
+      <div class="error-box">{{ error }}</div>
+  {% endif %}
+
+  {% if positions %}
+      <div class="result-box">
+          <h3>Motif Found at Positions:</h3>
+          <p>{{ positions }}</p>
+          <p><strong>Total Matches:</strong> {{ positions|length }}</p>
+      </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

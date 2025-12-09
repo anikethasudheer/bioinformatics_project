@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  /* Glass UI Card */
+  .rf-card {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 32px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+      backdrop-filter: blur(14px);
+      animation: fadeIn 0.4s ease;
+      color: #ffffff;
+  }
+
+  @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2, h3, label {
+      color: #ffffff !important;
+  }
+
+  /* Inputs & Textareas */
+  textarea {
+      width: 100%;
+      font-family: "JetBrains Mono", monospace;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.20);
+      color: #ffffff;
+      backdrop-filter: blur(10px);
+      margin-top: 6px;
+      font-size: 1rem;
+  }
+
+  textarea:focus {
+      border-color: #5b65ff;
+      outline: none;
+      box-shadow: 0 0 8px rgba(91,101,255,0.45);
+      background: rgba(255,255,255,0.30);
+  }
+
+  /* Glass Button */
+  .btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(91,101,255,0.85);
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.25s ease;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 22px rgba(91,101,255,0.30);
+  }
+
+  .btn:hover {
+      background: rgba(70,80,240,1);
+      transform: translateY(-3px);
+  }
+
+  /* Error message */
+  .error-box {
+      margin-top: 18px;
+      padding: 14px;
+      background: rgba(255,0,0,0.20);
+      border-left: 5px solid #ff4d4f;
+      border-radius: 12px;
+      color: #ffd6d6;
+  }
+
+  /* Enzyme result box */
+  .enzyme-box {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      backdrop-filter: blur(10px);
+  }
+
+  .enzyme-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #ffffff;
+  }
+
+  .enzyme-detail {
+      font-size: 1rem;
+      margin-top: 4px;
+      color: #e0e0ff;
+  }
+
+  /* Highlighted Sequence Box */
+  .highlighted-seq-box {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 16px;
+      border-radius: 14px;
+      margin-top: 20px;
+      font-family: "JetBrains Mono", monospace;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      line-height: 1.45;
+      color: #ffffff;
+      backdrop-filter: blur(10px);
+  }
+
+  /* FIX — wrap highlighted spans correctly */
+  .highlighted-seq-box span {
+      display: inline-block !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+      padding: 2px 4px;
+      margin: 2px 2px;
+      border-radius: 6px;
+      background: #ffe29a;
+      color: #222;
+  }
+
+  /* FIX — spacing between enzyme groups */
+  .result-section {
+      margin-top: 28px;
+  }
+</style>
+
+
+<div class="rf-card">
+
+  <h2>Restriction Enzyme Site Finder</h2>
+
+  <form method="POST">
+      {% csrf_token %}
+      <label>DNA Sequence:</label>
+      <textarea rows="5" name="sequence">{{ sequence }}</textarea>
+      <button class="btn" type="submit">Find Restriction Sites</button>
+  </form>
+
+  {% if highlighted_sequence %}
+      <h3 style="margin-top: 28px;">Highlighted Sequence</h3>
+      <div class="highlighted-seq-box">
+          {{ highlighted_sequence|safe }}
+      </div>
+  {% endif %}
+
+  {% if error %}
+      <div class="error-box">{{ error }}</div>
+  {% endif %}
+
+  {% if results %}
+      <div class="result-section">
+          {% for r in results %}
+              <div class="enzyme-box">
+                  <div class="enzyme-name">{{ r.enzyme }}</div>
+
+                  <div class="enzyme-detail"><strong>Site:</strong> {{ r.site }}</div>
+
+                  {% if r.count > 0 %}
+                      <div class="enzyme-detail"><strong>Positions:</strong> {{ r.positions|join:", " }}</div>
+                      <div class="enzyme-detail"><strong>Matches:</strong> {{ r.count }}</div>
+                  {% else %}
+                      <div class="enzyme-detail" style="opacity:0.7">No sites found.</div>
+                  {% endif %}
+              </div>
+          {% endfor %}
+      </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}
+

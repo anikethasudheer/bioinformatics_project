@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+
+    .primer-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+        animation: fadeIn 0.45s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glassmorphic Card */
+    .primer-card {
+        padding: 36px;
+        border-radius: 24px;
+        background: rgba(255,255,255,0.18);
+        border: 1px solid rgba(255,255,255,0.35);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+        color: #fff;
+    }
+
+    .primer-title {
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 8px;
+        color: #ffffff;
+    }
+
+    .primer-subtitle {
+        text-align: center;
+        font-size: 1rem;
+        color: #dcdcff;
+        margin-bottom: 24px;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #ffffff;
+    }
+
+    textarea {
+        width: 100%;
+        margin-top: 6px;
+        padding: 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.35);
+        background: rgba(255,255,255,0.15);
+        color: #fff;
+        backdrop-filter: blur(8px);
+        font-family: "JetBrains Mono", monospace;
+        min-height: 150px;
+        resize: vertical;
+        font-size: 0.95rem;
+        transition: 0.25s ease;
+    }
+
+    textarea:focus {
+        border-color: #7d85ff;
+        box-shadow: 0 0 8px rgba(111,118,255,0.6);
+        background: rgba(255,255,255,0.25);
+        outline: none;
+    }
+
+    .btn-primary {
+        margin-top: 18px;
+        padding: 13px 22px;
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.35);
+        background: rgba(91,101,255,0.85);
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.05rem;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(91,101,255,0.45);
+        transition: 0.25s ease;
+    }
+
+    .btn-primary:hover {
+        background: rgba(70,80,240,1);
+        transform: translateY(-3px);
+    }
+
+    .error-box {
+        margin-top: 16px;
+        background: rgba(255,70,70,0.30);
+        border-left: 6px solid rgba(255,70,70,0.95);
+        padding: 12px 16px;
+        border-radius: 14px;
+        color: #ffe5e5;
+        backdrop-filter: blur(10px);
+        font-size: 0.95rem;
+    }
+
+    .results-grid {
+        margin-top: 26px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 22px;
+    }
+
+    .primer-block {
+        padding: 18px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.25);
+        border: 1px solid rgba(255,255,255,0.35);
+        backdrop-filter: blur(10px);
+    }
+
+    .primer-block h3 {
+        margin: 0 0 8px;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    .primer-seq {
+        background: rgba(255,255,255,0.15);
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.35);
+        font-family: "JetBrains Mono", monospace;
+        color: #e6e6ff;
+        font-size: 0.9rem;
+        word-wrap: break-word;
+    }
+
+    .primer-meta {
+        margin-top: 10px;
+        font-size: 0.95rem;
+        color: #e7e7ff;
+    }
+
+    .hint-text {
+        margin-top: 26px;
+        font-size: 0.9rem;
+        color: #d3d3ff;
+        text-align: center;
+        background: rgba(255,255,255,0.18);
+        padding: 10px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.25);
+        backdrop-filter: blur(8px);
+    }
+
+</style>
+
+
+<div class="primer-wrapper">
+    <div class="primer-card">
+
+        <h2 class="primer-title">Primer Designer</h2>
+        <div class="primer-subtitle">
+            Generate forward and reverse primers with estimated melting temperatures.
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <label for="sequence">DNA Sequence</label>
+            <textarea id="sequence" name="sequence">{{ sequence }}</textarea>
+
+            <button type="submit" class="btn-primary">Design Primers</button>
+        </form>
+
+        {% if error %}
+            <div class="error-box">{{ error }}</div>
+        {% endif %}
+
+        {% if forward_primer and reverse_primer %}
+            <div class="results-grid">
+
+                <div class="primer-block">
+                    <h3>Forward Primer</h3>
+                    <div class="primer-seq">{{ forward_primer }}</div>
+                    <div class="primer-meta">
+                        Tm: <strong>{{ tm_forward }} °C</strong>
+                    </div>
+                </div>
+
+                <div class="primer-block">
+                    <h3>Reverse Primer</h3>
+                    <div class="primer-seq">{{ reverse_primer }}</div>
+                    <div class="primer-meta">
+                        Tm: <strong>{{ tm_reverse }} °C</strong>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="hint-text">
+                Note: This is a simple primer demo using the Wallace rule (2×A/T + 4×G/C).<br>
+                You can later upgrade to fully optimized PCR primer design.
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .detail-wrapper {
+        max-width: 850px;
+        margin: 0 auto;
+        animation: fadeIn 0.45s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glassmorphic Card */
+    .detail-card {
+        padding: 34px;
+        border-radius: 24px;
+        background: rgba(255,255,255,0.18);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255,255,255,0.35);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+        color: #ffffff;
+    }
+
+    .detail-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 26px;
+        color: #ffffff;
+    }
+
+    .info-section {
+        background: rgba(255,255,255,0.25);
+        padding: 18px 20px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.35);
+        backdrop-filter: blur(10px);
+        margin-bottom: 28px;
+    }
+
+    .info-row {
+        margin-bottom: 14px;
+        font-size: 1rem;
+        color: #f1f1ff;
+    }
+
+    .label {
+        font-weight: 700;
+        color: #fff;
+    }
+
+    /* Sequence Viewer */
+    .sequence-box {
+        background: rgba(255,255,255,0.18);
+        border: 1px solid rgba(255,255,255,0.38);
+        padding: 14px 18px;
+        border-radius: 14px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.95rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-height: 260px;
+        overflow-y: auto;
+        color: #fff;
+        backdrop-filter: blur(8px);
+    }
+
+    /* Actions */
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 14px;
+        margin-top: 20px;
+    }
+
+    .btn {
+        text-decoration: none;
+        padding: 11px 22px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        transition: 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255,255,255,0.35);
+    }
+
+    .btn-edit {
+        background: rgba(109,115,255,0.90);
+        color: #fff;
+        box-shadow: 0 5px 18px rgba(109,115,255,0.50);
+    }
+    .btn-edit:hover {
+        background: rgba(92,98,235,1);
+        transform: translateY(-2px);
+    }
+
+    .btn-delete {
+        background: rgba(255,70,70,0.90);
+        color: #fff;
+        box-shadow: 0 5px 18px rgba(255,70,70,0.45);
+    }
+    .btn-delete:hover {
+        background: rgba(230,50,50,1);
+        transform: translateY(-2px);
+    }
+
+    .btn-back {
+        background: rgba(255,255,255,0.25);
+        color: #fff;
+    }
+    .btn-back:hover {
+        background: rgba(255,255,255,0.40);
+        transform: translateY(-2px);
+    }
+
+</style>
+
+<div class="detail-wrapper">
+    <div class="detail-card">
+
+        <h2 class="detail-title">Sequence Details</h2>
+
+        <div class="info-section">
+            <div class="info-row"><span class="label">ID:</span> {{ sequence.id }}</div>
+
+            <div class="info-row"><span class="label">Sequence:</span></div>
+            <div class="sequence-box">{{ sequence.sequence }}</div>
+
+            <div class="info-row"><span class="label">Length:</span> {{ sequence.length }}</div>
+
+            <div class="info-row">
+                <span class="label">GC Content:</span> {{ sequence.gc_content|floatformat:2 }}%
+            </div>
+
+            <div class="info-row">
+                <span class="label">Submitted:</span> {{ sequence.submission_date }}
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'sequence_update' sequence.id %}" class="btn btn-edit">Edit</a>
+            <a href="{% url 'sequence_delete' sequence.id %}" class="btn btn-delete">Delete</a>
+            <a href="{% url 'sequence_list' %}" class="btn btn-back">Back</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
